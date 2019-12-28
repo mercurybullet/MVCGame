@@ -11,7 +11,7 @@ namespace RampConsole {
         {
             {TileType.Grass, "w"},
             {TileType.Player, "@"},
-            {TileType.Mine, "*"},
+            {TileType.food, "*"},
             {TileType.Blank, " "}
         };
 
@@ -38,5 +38,11 @@ namespace RampConsole {
         public void PrintDieMessage() {
             Console.WriteLine("YOU DIED");
         }
+
+        public void PrintScore(int score) {
+
+            Console.Title=$"当前分数：{score}";
+        }
+
     }
 }

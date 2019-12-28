@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Schema;
 using MercuryGames.Shared;
 
 namespace RampConsole {
@@ -18,9 +19,11 @@ namespace RampConsole {
         public int Width { get; }
 
         public Point PlayerLocation { get; private set; }
-        public HashSet<Point> Mines { get; private set; } = new HashSet<Point>();
+        public HashSet<Point> Foods { get; private set; } = new HashSet<Point>();
 
         public TileType[,] Map { get; }
+
+        public int Score { get; set; }
 
         public Model(int w, int h) {
             this.Width = w;
@@ -34,9 +37,9 @@ namespace RampConsole {
         public void SetTile(Point p, TileType value) { this.Map[p.X, p.Y] = value; }
 
         private void GenerateRandomMines(int count = 10) {
-            this.Mines.Clear();
+            this.Foods.Clear();
             while (count-- > 0) {
-                this.Mines.Add(this.GetRandomPoint());
+                this.Foods.Add(this.GetRandomPoint());
             }
         }
 
@@ -69,10 +72,12 @@ namespace RampConsole {
 
             list.Add(new TileUpdateInfo {P = this.PlayerLocation, Type = TileType.Player});
 
+            this.ProcessFoodLogic();
+
             return list;
         }
 
-        public bool TestBomb() => this.GetTile(this.PlayerLocation) == TileType.Mine;
+        public bool TestFood() => this.GetTile(this.PlayerLocation) == TileType.food;
 
         public void Reset() {
             this.GenerateRandomMines();
@@ -83,9 +88,24 @@ namespace RampConsole {
                 }
             }
 
-            foreach (var mine in this.Mines) {
-                this.SetTile(mine, TileType.Mine);
+            foreach (var food in this.Foods) {
+                this.SetTile(food, TileType.food);
             }
+        }
+
+        public bool IsWin() { return this.Foods.Count == 0; }
+
+        private void ProcessFoodLogic() {
+            if (this.TestFood()) {
+                this.SetTile(this.PlayerLocation, TileType.Blank);
+                this.AddScore();
+                this.Foods.Remove(this.PlayerLocation);
+            }
+        }
+
+        public void AddScore() {
+            this.Score += 1;
+          
         }
     }
 }

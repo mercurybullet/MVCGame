@@ -7,6 +7,6 @@ namespace MercuryGames.Shared {
         Grass,
         Blank,
         Player,
-        Mine
+        food
     }
 }

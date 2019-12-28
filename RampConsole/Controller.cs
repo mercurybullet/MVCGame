@@ -49,10 +49,12 @@ namespace RampConsole {
 
             this.UpdatePlayerToView(update);
 
-            if (this.model.TestBomb()) {
-                this.view.PrintDieMessage();
+            if (this.model.IsWin()) {
+                Console.WriteLine("player win.");
                 this.HandelGameOverInput();
             }
+
+            this.view.PrintScore(this.model.Score);
         }
 
         public void HandelUserInput() {
