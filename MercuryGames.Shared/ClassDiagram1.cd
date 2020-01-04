@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="MercuryGames.Shared.DirectionHelper" Collapsed="true">
+    <Position X="6" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Direction.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MercuryGames.Shared.TileMap&lt;T&gt;" Collapsed="true">
+    <Position X="7.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAABAAAAAAACAAAAEAAAAAACAAAAAAAAAAAAAA=</HashCode>
+      <FileName>TileMap.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="MercuryGames.Shared.Point" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="6" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AJAgAAAAAAAAAAAEwAEAAAIAAQAAAAAAAAAgAACAYyA=</HashCode>
+      <FileName>Point.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Struct>
+  <Struct Name="MercuryGames.Shared.TileUpdateInfo&lt;T&gt;" Collapsed="true">
+    <Position X="7.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAABAAAA=</HashCode>
+      <FileName>TileUpdateInfo.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Interface Name="MercuryGames.Shared.IModel&lt;T&gt;" Collapsed="true">
+    <Position X="1" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgABBAABAgAAAAAEEQAAAAAAACAAAAAAAAAAgA=</HashCode>
+      <FileName>IModel.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MercuryGames.Shared.IView&lt;T&gt;" Collapsed="true">
+    <Position X="3.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQACAAAAAAAAAAAAAAAAAAAAAAAAQAA=</HashCode>
+      <FileName>IView.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="MercuryGames.Shared.IView&lt;T, U&gt;" Collapsed="true">
+    <Position X="3.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IView.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="MercuryGames.Shared.Direction" Collapsed="true">
+    <Position X="6" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAACACAAAAAAAI=</HashCode>
+      <FileName>Direction.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="MercuryGames.Shared.GameKey" Collapsed="true">
+    <Position X="7.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAACAAAAAAAAAAAAAAAAAAAAAACACAYAEAAAI=</HashCode>
+      <FileName>GameKey.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Microsoft YaHei UI" Size="9" />
+</ClassDiagram>

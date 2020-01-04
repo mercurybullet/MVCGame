@@ -43,19 +43,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ColorfulConsoleView.cs" />
     <Compile Include="Controller.cs" />
-    <Compile Include="Model.cs" />
+    <Compile Include="SimpleModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="View.cs" />
+    <Compile Include="SimpleConsoleView.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MercuryGames.Shared\MercuryGames.Shared.csproj">
       <Project>{92c07784-e996-44de-be19-971a4822cb71}</Project>
       <Name>MercuryGames.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MercuryGames.Snake\MercuryGames.Snake.csproj">
+      <Project>{06680a86-a92a-4312-a005-2a3932b4a433}</Project>
+      <Name>MercuryGames.Snake</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

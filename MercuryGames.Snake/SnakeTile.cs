@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MercuryGames.Shared {
-    public enum TileType {
+namespace MercuryGames.Snake {
+    public enum SnakeTile {
         Grass,
         Blank,
         Player,
-        food
+        Food
     }
 }

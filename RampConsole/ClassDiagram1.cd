@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="RampConsole.ColorfulConsoleView&lt;T&gt;">
+    <Position X="3.5" Y="3.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>ColorfulConsoleView.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="RampConsole.Controller&lt;T&gt;">
+    <Position X="9.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAQQAAgAIAhAIAAIAAAAAAAAABACAAAQAAAAAIABA=</HashCode>
+      <FileName>Controller.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RampConsole.Program" Collapsed="true">
+    <Position X="7.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAACBAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RampConsole.SimpleConsoleView&lt;T&gt;">
+    <Position X="3.5" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAAQADAAAAAAAAAQAAABAAAAAAAAAAQAA=</HashCode>
+      <FileName>SimpleConsoleView.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.133" />
+  </Class>
+  <Class Name="RampConsole.SimpleModel" BaseTypeListCollapsed="true">
+    <Position X="6" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ARAEEAgQBBAADAgAAAAAEMQAAAAAAAiJAAAAAAACAgA=</HashCode>
+      <FileName>SimpleModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MercuryGames.Snake.SnakeModel" BaseTypeListCollapsed="true">
+    <Position X="7.75" Y="5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MercuryGames.Shared.TileMap&lt;T&gt;" Collapsed="true">
+    <Position X="6" Y="2.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="MercuryGames.Shared.Direction" Collapsed="true">
+    <Position X="7.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="MercuryGames.Shared.DirectionHelper" Collapsed="true">
+    <Position X="9.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="MercuryGames.Shared.GameKey" Collapsed="true">
+    <Position X="11.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="MercuryGames.Shared.Point" Collapsed="true">
+    <Position X="6" Y="1.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="MercuryGames.Shared.TileUpdateInfo&lt;T&gt;" Collapsed="true">
+    <Position X="7.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Interface Name="MercuryGames.Shared.IModel&lt;T&gt;" Collapsed="true">
+    <Position X="6" Y="3.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="MercuryGames.Shared.IView&lt;T&gt;" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="MercuryGames.Shared.IView&lt;T, U&gt;" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Font Name="Microsoft YaHei UI" Size="9" />
+</ClassDiagram>

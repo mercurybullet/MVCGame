@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace MercuryGames.Shared {
-    public class TileMap {
+    public class TileMap<T> {
         public int Height { get; }
         public int Width { get; }
 
-        private TileType[,] map;
+        private T[,] map;
 
         public TileMap(int w, int h) {
             this.Width = w;
             this.Height = h;
-            this.map = new TileType[w, h];
+            this.map = new T[w, h];
         }
 
-        public TileType this[Point index] {
+        public T this[Point index] {
             get {
                 return this.map[index.X, index.Y];
             }
@@ -24,7 +24,7 @@ namespace MercuryGames.Shared {
             }
         }
 
-        public TileType this[int a, int b] {
+        public T this[int a, int b] {
             get {
                 return this.map[a, b];
             }
@@ -33,7 +33,7 @@ namespace MercuryGames.Shared {
             }
         }
 
-        public void Fill(TileType type) {
+        public void Fill(T type) {
             for (int i = 0; i < this.Width; i++) {
                 for (int j = 0; j < this.Height; j++) {
                     this.map[i, j] = type;

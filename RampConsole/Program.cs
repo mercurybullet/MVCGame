@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MercuryGames.Shared;
+using MercuryGames.Snake;
 
 namespace RampConsole {
     class Program {
@@ -16,9 +17,46 @@ namespace RampConsole {
         }
 
         static void Main() {
-            Model model = new Model(20, 15);
-            View view = new View();
-            Controller controller = new Controller(model, view);
+            IModel<SnakeTile> model = new SnakeModel(20, 15);
+            SimpleConsoleView<SnakeTile> simpleConsoleView = new SimpleConsoleView<SnakeTile>();
+            ColorfulConsoleView<SnakeTile> colorful = new ColorfulConsoleView<SnakeTile>();
+
+            simpleConsoleView.SetTextureMap(new Dictionary<SnakeTile, string>
+            {
+                {SnakeTile.Grass, "w"},
+                {SnakeTile.Blank, " "},
+                {SnakeTile.Player, "@"},
+                {SnakeTile.Food, "*"}
+            });
+
+            colorful.SetTextureMap(new Dictionary<SnakeTile, string>
+            {
+                {SnakeTile.Grass, "w"},
+                {SnakeTile.Blank, " "},
+                {SnakeTile.Player, "@"},
+                {SnakeTile.Food, "*"}
+            });
+
+            colorful.SetTextureMap(new Dictionary<SnakeTile, ConsoleColor>
+            {
+                {SnakeTile.Grass, ConsoleColor.Green},
+                {SnakeTile.Player, ConsoleColor.White},
+                {SnakeTile.Food, ConsoleColor.Red},
+                {SnakeTile.Blank, ConsoleColor.Black}
+            });
+
+            IView<SnakeTile> view;
+
+            Console.WriteLine("你想要：A.黑白电视 B.彩色电视：");
+            string input = Console.ReadLine();
+            if (input.StartsWith("B")) {
+                view = colorful;
+            }
+            else {
+                view = simpleConsoleView;
+            }
+
+            Controller<SnakeTile> controller = new Controller<SnakeTile>(model, view);
             controller.GameMain();
         }
 
