@@ -20,26 +20,29 @@ namespace RampConsole {
         private Direction lastDirection = Direction.Right;
 
         private FrameSkipper fs = new FrameSkipper(5);
+
+        private readonly TileMap<SimpleTile> map;
+
         public int Height { get; }
         public int Width { get; }
 
         public Point PlayerLocation { get; private set; }
         public HashSet<Point> Foods { get; private set; } = new HashSet<Point>();
 
-        public SimpleTile[,] Map { get; }
+        public IReadOnlyTileMap<SimpleTile> Map => this.map;
 
         public int Score { get; set; }
 
         public SimpleModel(int w, int h) {
             this.Width = w;
             this.Height = h;
-            this.Map = new SimpleTile[w, h];
+            this.map = new TileMap<SimpleTile>(w, h);
             this.Reset();
         }
 
-        public SimpleTile GetTile(Point p) { return this.Map[p.X, p.Y]; }
+        public SimpleTile GetTile(Point p) { return this.map[p.X, p.Y]; }
 
-        public void SetTile(Point p, SimpleTile value) { this.Map[p.X, p.Y] = value; }
+        public void SetTile(Point p, SimpleTile value) { this.map[p.X, p.Y] = value; }
 
         private void GenerateRandomMines(int count = 10) {
             this.Foods.Clear();
@@ -139,11 +142,7 @@ namespace RampConsole {
             this.Score = 0;
             this.dead = false;
 
-            for (int i = 0; i < this.Width; i++) {
-                for (int j = 0; j < this.Height; j++) {
-                    this.Map[i, j] = SimpleTile.Blank;
-                }
-            }
+            this.map.Fill(SimpleTile.Blank);
 
             foreach (var food in this.Foods) {
                 this.SetTile(food, SimpleTile.Food);

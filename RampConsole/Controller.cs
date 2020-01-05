@@ -126,11 +126,7 @@ namespace RampConsole {
         //画出地雷
         public void InitView() {
             this.view.PrintScore(this.model.Score);
-            for (int i = 0; i < this.model.Width; i++) {
-                for (int j = 0; j < this.model.Height; j++) {
-                    this.view.UpdateTile(new Point(i, j), this.model.Map[i, j]);
-                }
-            }
+            this.view.DrawTileMap(this.model.Map);
 
             this.UpdateView(this.model.GetFullPlayerInfo());
         }

@@ -20,6 +20,6 @@ namespace MercuryGames.Shared {
 
         int Height { get; }
 
-        T[,] Map { get; }
+        IReadOnlyTileMap<T> Map { get; }
     }
 }

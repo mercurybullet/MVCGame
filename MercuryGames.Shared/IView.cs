@@ -11,6 +11,10 @@ namespace MercuryGames.Shared {
         void Clean();
 
         void UpdateTile(Point p, T type);
+
+        void UpdateTile(int x, int y, T type);
+
+        void DrawTileMap(IReadOnlyTileMap<T> map);
     }
 
     /// <summary>

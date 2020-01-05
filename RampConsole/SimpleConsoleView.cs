@@ -18,11 +18,23 @@ namespace RampConsole {
 
         public void Clean() { Console.Clear(); }
 
-        public virtual void UpdateTile(Point p, T type) {
+        public virtual void DrawTileMap(IReadOnlyTileMap<T> map) {
+            for (int i = 0; i < map.Width; i++) {
+                for (int j = 0; j < map.Height; j++) {
+                    this.UpdateTile(i, j, map[i, j]);
+                }
+            }
+        }
+
+        public void UpdateTile(Point p, T type) {
+            this.UpdateTile(p.X, p.Y, type);
+        }
+
+        public virtual void UpdateTile(int x, int y, T type) {
             int h = Console.WindowHeight;
 
             //Console.WriteLine("您的当前位置是{0}", p);
-            Console.SetCursorPosition(p.X, h - p.Y - 1);
+            Console.SetCursorPosition(x, h - y - 1);
             Console.Write(this.textureMap[type]);
         }
 

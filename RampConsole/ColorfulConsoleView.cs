@@ -17,11 +17,11 @@ namespace RampConsole {
         //    {TileType.Blank, ConsoleColor.Black}
         //};
 
-        public override void UpdateTile(Point p, T type) {
+        public override void UpdateTile(int x, int y, T type) {
             int h = Console.WindowHeight;
 
             //Console.WriteLine("您的当前位置是{0}", p);
-            Console.SetCursorPosition(p.X, h - p.Y - 1);
+            Console.SetCursorPosition(x, h - y - 1);
             Console.BackgroundColor = tileColorMap[type];
             Console.Write(this.textureMap[type]);
             Console.ResetColor();

@@ -22,14 +22,17 @@ namespace MercuryGames.Snake {
         public HashSet<Point> Foods { get; private set; } = new HashSet<Point>();
 
         // TODO: 改成双层地图，一层放地形，一层放player和食物
-        public SnakeTile[,] Map { get; }
+
+        IReadOnlyTileMap<SnakeTile> IModel<SnakeTile>.Map => this.Map;
+        
+        public TileMap<SnakeTile> Map { get; }
 
         public int Score { get; set; }
 
         public SnakeModel(int w, int h) {
             this.Width = w;
             this.Height = h;
-            this.Map = new SnakeTile[w, h];
+            this.Map = new TileMap<SnakeTile>(w, h);
             this.Reset();
         }
 
@@ -142,11 +145,7 @@ namespace MercuryGames.Snake {
             this.Score = 0;
             this.dead = false;
 
-            for (int i = 0; i < this.Width; i++) {
-                for (int j = 0; j < this.Height; j++) {
-                    this.Map[i, j] = SnakeTile.Grass;
-                }
-            }
+            this.Map.Fill(SnakeTile.Grass);
 
             foreach (var food in this.Foods) {
                 this.SetTile(food, SnakeTile.Food);
@@ -184,7 +183,10 @@ namespace MercuryGames.Snake {
             return false;
         }
 
-        private bool IsEatingSelf() { return this.snakeBodies.Count(p => p == this.PlayerLocation) > 1; }
+        private bool IsEatingSelf() {
+            // 如果蛇头的位置重合了
+            return this.snakeBodies.Count(p => p == this.PlayerLocation) > 1;
+        }
 
         public void AddScore() { this.Score += 1; }
     }
