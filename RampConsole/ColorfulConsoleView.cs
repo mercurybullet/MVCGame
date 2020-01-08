@@ -25,6 +25,7 @@ namespace RampConsole {
             Console.BackgroundColor = tileColorMap[type];
             Console.Write(this.textureMap[type]);
             Console.ResetColor();
+            Console.SetCursorPosition(0, 0);
         }
 
         public void SetTextureMap(IDictionary<T, ConsoleColor> map) { this.tileColorMap = map; }

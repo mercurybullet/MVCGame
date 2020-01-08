@@ -21,13 +21,13 @@ namespace RampConsole {
 
         private FrameSkipper fs = new FrameSkipper(5);
 
-        private readonly TileMap<SimpleTile> map;
+        private readonly DoubleLayerTileMap<SimpleTile> map;
 
         public int Height { get; }
         public int Width { get; }
 
         public Point PlayerLocation { get; private set; }
-        public HashSet<Point> Foods { get; private set; } = new HashSet<Point>();
+        public HashSet<Point> FoodLocations { get; private set; } = new HashSet<Point>();
 
         public IReadOnlyTileMap<SimpleTile> Map => this.map;
 
@@ -36,18 +36,14 @@ namespace RampConsole {
         public SimpleModel(int w, int h) {
             this.Width = w;
             this.Height = h;
-            this.map = new TileMap<SimpleTile>(w, h);
+            this.map = new DoubleLayerTileMap<SimpleTile>(w, h);
             this.Reset();
         }
 
-        public SimpleTile GetTile(Point p) { return this.map[p.X, p.Y]; }
-
-        public void SetTile(Point p, SimpleTile value) { this.map[p.X, p.Y] = value; }
-
-        private void GenerateRandomMines(int count = 10) {
-            this.Foods.Clear();
+        private void GenerateRandomFoods(int count = 10) {
+            this.FoodLocations.Clear();
             while (count-- > 0) {
-                this.Foods.Add(this.GetRandomPoint());
+                this.FoodLocations.Add(this.GetRandomPoint());
             }
         }
 
@@ -57,12 +53,7 @@ namespace RampConsole {
             return new Point(x, y);
         }
 
-        public IEnumerable<TileUpdateInfo<SimpleTile>> GetFullPlayerInfo() {
-            var list = new List<TileUpdateInfo<SimpleTile>>{new TileUpdateInfo<SimpleTile> {P = this.PlayerLocation, Type = SimpleTile.Player}};
-            return list;
-        }
-
-        public IEnumerable<TileUpdateInfo<SimpleTile>> Update(params GameKey[] input) {
+        public IEnumerable<Point> Update(params GameKey[] input) {
             if (input.Length == 0) {
                 return this.ProcessPlayerMove(this.lastDirection);
             }
@@ -93,17 +84,18 @@ namespace RampConsole {
             return ProcessPlayerMove(this.lastDirection);
         }
 
-        public IEnumerable<TileUpdateInfo<SimpleTile>> ProcessNoInputFrame() {
-            return Array.Empty<TileUpdateInfo<SimpleTile>>();
+        public IEnumerable<Point> ProcessNoInputFrame() {
+            return Array.Empty<Point>();
         }
 
-        public IEnumerable<TileUpdateInfo<SimpleTile>> ProcessPlayerMove(Direction direction) {
+        public IEnumerable<Point> ProcessPlayerMove(Direction direction) {
             if (!this.fs.Tick()) {
-                return Array.Empty<TileUpdateInfo<SimpleTile>>();
+                return Array.Empty<Point>();
             }
 
-            var list = new List<TileUpdateInfo<SimpleTile>>();
-            list.Add(new TileUpdateInfo<SimpleTile> {P = this.PlayerLocation, Type = this.GetTile(this.PlayerLocation)});
+            var list = new List<Point>();
+            this.map.Foreground[this.PlayerLocation] = null;
+            list.Add(this.PlayerLocation);
 
             switch (direction) {
             case Direction.Right:
@@ -123,41 +115,42 @@ namespace RampConsole {
                 else this.dead = true;
                 break;
             default:
-                return Array.Empty<TileUpdateInfo<SimpleTile>>();
+                return Array.Empty<Point>();
             }
-
-            list.Add(new TileUpdateInfo<SimpleTile> {P = this.PlayerLocation, Type = SimpleTile.Player});
 
             this.ProcessFoodLogic();
 
+            this.map.Foreground[this.PlayerLocation] = SimpleTile.Player;
+            list.Add(this.PlayerLocation);
+            
             return list;
         }
 
-        public bool TestFood() => this.GetTile(this.PlayerLocation) == SimpleTile.Food;
+        public bool TestFood() => this.map.Foreground[this.PlayerLocation] == SimpleTile.Food;
 
         public void Reset() {
             this.lastDirection = Direction.Right;
-            this.GenerateRandomMines();
+            this.GenerateRandomFoods();
             this.PlayerLocation = Point.Zero;
             this.Score = 0;
             this.dead = false;
 
-            this.map.Fill(SimpleTile.Blank);
+            this.map.Background.Fill(SimpleTile.Blank);
 
-            foreach (var food in this.Foods) {
-                this.SetTile(food, SimpleTile.Food);
+            foreach (var foodLocation in this.FoodLocations) {
+                this.map.Foreground[foodLocation] = SimpleTile.Food;
             }
         }
 
-        public bool IsWin() { return this.Foods.Count == 0; }
+        public bool IsWin() { return this.FoodLocations.Count == 0; }
 
         public bool IsDead() { return this.dead; }
 
         private void ProcessFoodLogic() {
             if (this.TestFood()) {
-                this.SetTile(this.PlayerLocation, SimpleTile.Blank);
+                this.map.Foreground[this.PlayerLocation] = SimpleTile.Blank;
                 this.AddScore();
-                this.Foods.Remove(this.PlayerLocation);
+                this.FoodLocations.Remove(this.PlayerLocation);
             }
         }
 

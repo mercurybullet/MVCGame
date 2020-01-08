@@ -7,6 +7,24 @@ using MercuryGames.Shared;
 using MercuryGames.Snake;
 
 namespace RampConsole {
+    interface IConnection {
+        void Open();
+    }
+
+    interface IWindow {
+        void Open();
+    }
+
+    class Something : IConnection, IWindow {
+        public void Open() {
+            Console.WriteLine("I'm opening");
+        }
+
+        void IWindow.Open() {
+            Console.WriteLine("I'm opening a window");
+        }
+    }
+
     class Program {
         public static void WriteAt(Point p, string s) {
             int h = Console.WindowHeight;
@@ -15,6 +33,8 @@ namespace RampConsole {
             Console.SetCursorPosition(p.X, h - p.Y - 1);
             Console.Write(s);
         }
+
+
 
         static void Main() {
             IModel<SnakeTile> model = new SnakeModel(20, 15);
@@ -25,7 +45,7 @@ namespace RampConsole {
             {
                 {SnakeTile.Grass, "w"},
                 {SnakeTile.Blank, " "},
-                {SnakeTile.Player, "@"},
+                {SnakeTile.Snake, "@"},
                 {SnakeTile.Food, "*"}
             });
 
@@ -33,14 +53,14 @@ namespace RampConsole {
             {
                 {SnakeTile.Grass, "w"},
                 {SnakeTile.Blank, " "},
-                {SnakeTile.Player, "@"},
+                {SnakeTile.Snake, "@"},
                 {SnakeTile.Food, "*"}
             });
 
             colorful.SetTextureMap(new Dictionary<SnakeTile, ConsoleColor>
             {
                 {SnakeTile.Grass, ConsoleColor.Green},
-                {SnakeTile.Player, ConsoleColor.White},
+                {SnakeTile.Snake, ConsoleColor.White},
                 {SnakeTile.Food, ConsoleColor.Red},
                 {SnakeTile.Blank, ConsoleColor.Black}
             });

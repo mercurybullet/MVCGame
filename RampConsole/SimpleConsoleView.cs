@@ -36,6 +36,7 @@ namespace RampConsole {
             //Console.WriteLine("您的当前位置是{0}", p);
             Console.SetCursorPosition(x, h - y - 1);
             Console.Write(this.textureMap[type]);
+            Console.SetCursorPosition(0, 0);
         }
 
         public void WriteAt(Point p, string s) {

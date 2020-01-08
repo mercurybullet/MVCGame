@@ -4,9 +4,7 @@ using System.Text;
 
 namespace MercuryGames.Shared {
     public interface IModel <T> {
-        IEnumerable<TileUpdateInfo<T>> Update(params GameKey[] input);
-
-        IEnumerable<TileUpdateInfo<T>> GetFullPlayerInfo();
+        IEnumerable<Point> Update(params GameKey[] input);
 
         bool IsWin();
 
