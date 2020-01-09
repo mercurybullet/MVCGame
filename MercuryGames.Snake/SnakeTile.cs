@@ -6,7 +6,7 @@ namespace MercuryGames.Snake {
     public enum SnakeTile {
         Grass,
         Blank,
-        Player,
+        Snake,
         Food
     }
 }

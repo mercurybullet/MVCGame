@@ -57,7 +57,7 @@ namespace RampConsole {
             var key = this.lastInputKey;
             this.lastInputKey = null;
 
-            IEnumerable<TileUpdateInfo<T>> update;
+            IEnumerable<Point> update;
             update = key == null ? this.model.Update() : this.model.Update(key.Value);
 
             this.UpdateView(update);
@@ -127,13 +127,11 @@ namespace RampConsole {
         public void InitView() {
             this.view.PrintScore(this.model.Score);
             this.view.DrawTileMap(this.model.Map);
-
-            this.UpdateView(this.model.GetFullPlayerInfo());
         }
 
-        public void UpdateView(IEnumerable<TileUpdateInfo<T>> update) {
-            foreach (var info in update) {
-                this.view.UpdateTile(info.P, info.Type);
+        public void UpdateView(IEnumerable<Point> update) {
+            foreach (var p in update) {
+                this.view.UpdateTile(p, this.model.Map[p]);
             }
         }
     }

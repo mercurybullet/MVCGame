@@ -9,48 +9,43 @@ namespace MercuryGames.Snake {
 
         private bool dead = false;
 
-        private Queue<Point> snakeBodies = new Queue<Point>();
+        private Queue<Point> snakeBodyLocations = new Queue<Point>();
 
         private Direction lastDirection = Direction.Right;
 
-        private FrameSkipper fs = new FrameSkipper(5);
+        private FrameSkipper frameSkipper = new FrameSkipper(5);
 
         public int Height { get; }
         public int Width { get; }
 
-        private Point PlayerLocation { get; set; }
-        public HashSet<Point> Foods { get; private set; } = new HashSet<Point>();
+        private Point headLocation;
+        public HashSet<Point> FoodLocations { get; private set; } = new HashSet<Point>();
 
         // TODO: 改成双层地图，一层放地形，一层放player和食物
 
         IReadOnlyTileMap<SnakeTile> IModel<SnakeTile>.Map => this.Map;
-        
-        public TileMap<SnakeTile> Map { get; }
+
+        public DoubleLayerTileMap<SnakeTile> Map { get; }
 
         public int Score { get; set; }
 
         public SnakeModel(int w, int h) {
             this.Width = w;
             this.Height = h;
-            this.Map = new TileMap<SnakeTile>(w, h);
+            this.Map = new DoubleLayerTileMap<SnakeTile>(w, h);
             this.Reset();
         }
 
-        public SnakeTile GetTile(Point p) { return this.Map[p.X, p.Y]; }
-
-        public void SetTile(Point p, SnakeTile value) { this.Map[p.X, p.Y] = value; }
-
-
-        public IEnumerable<TileUpdateInfo<SnakeTile>> GetFullPlayerInfo() {
-            var list = new List<TileUpdateInfo<SnakeTile>>();
-            foreach (Point body in this.snakeBodies) {
-                list.Add(new TileUpdateInfo<SnakeTile> {P = body, Type = SnakeTile.Player});
+        public IEnumerable<Point> GetFullPlayerInfo() {
+            var list = new List<Point>();
+            foreach (Point body in this.snakeBodyLocations) {
+                list.Add(body);
             }
 
             return list;
         }
 
-        public IEnumerable<TileUpdateInfo<SnakeTile>> Update(params GameKey[] input) {
+        public IEnumerable<Point> Update(params GameKey[] input) {
             if (input.Length == 0) {
                 return this.ProcessPlayerMove(this.lastDirection);
             }
@@ -61,7 +56,7 @@ namespace MercuryGames.Snake {
             case GameKey.A:
                 break;
             case GameKey.B:
-                this.fs.FramePerUpdate = this.fs.FramePerUpdate == 5 ? 3 : 5;
+                this.frameSkipper.FramePerUpdate = this.frameSkipper.FramePerUpdate == 5 ? 3 : 5;
                 break;
 
             case GameKey.Up:
@@ -81,52 +76,51 @@ namespace MercuryGames.Snake {
             return ProcessPlayerMove(this.lastDirection);
         }
 
-        private IEnumerable<TileUpdateInfo<SnakeTile>> ProcessPlayerMove(Direction direction) {
-            if (!this.fs.Tick()) {
-                return Array.Empty<TileUpdateInfo<SnakeTile>>();
+        private IEnumerable<Point> ProcessPlayerMove(Direction direction) {
+            if (!this.frameSkipper.Tick()) {
+                return Array.Empty<Point>();
             }
 
-            var list = new List<TileUpdateInfo<SnakeTile>>();
-            Point tail = this.snakeBodies.Peek();
-
+            var list = new List<Point>();
+            Point previousTailLocation = this.snakeBodyLocations.Peek();
 
             switch (this.lastDirection) {
             case Direction.Right:
-                if (this.PlayerLocation.X < this.Width - 1) this.PlayerLocation = this.PlayerLocation.RightPosition();
+                if (this.headLocation.X < this.Width - 1) this.headLocation = this.headLocation.RightPosition();
                 else this.dead = true;
                 break;
             case Direction.Left:
-                if (this.PlayerLocation.X > 0) this.PlayerLocation = this.PlayerLocation.LeftPosition();
+                if (this.headLocation.X > 0) this.headLocation = this.headLocation.LeftPosition();
                 else this.dead = true;
                 break;
             case Direction.Up:
-                if (this.PlayerLocation.Y < this.Height - 1) this.PlayerLocation = this.PlayerLocation.UpPosition();
+                if (this.headLocation.Y < this.Height - 1) this.headLocation = this.headLocation.UpPosition();
                 else this.dead = true;
                 break;
             case Direction.Down:
-                if (this.PlayerLocation.Y > 0) this.PlayerLocation = this.PlayerLocation.DownPosition();
+                if (this.headLocation.Y > 0) this.headLocation = this.headLocation.DownPosition();
                 else this.dead = true;
                 break;
             default:
-                return Array.Empty<TileUpdateInfo<SnakeTile>>();
+                return Array.Empty<Point>();
             }
 
             bool eat = this.ProcessFoodLogic();
-
-            if (eat) {
-                list.Add(new TileUpdateInfo<SnakeTile> {P = this.PlayerLocation, Type = SnakeTile.Player});
-            }
-            else {
-                this.snakeBodies.Dequeue(); // 去掉尾巴
-                list.Add(new TileUpdateInfo<SnakeTile> {P = tail, Type = this.GetTile(tail)});
-                list.Add(new TileUpdateInfo<SnakeTile> {P = this.PlayerLocation, Type = SnakeTile.Player});
-            }
-
-            this.snakeBodies.Enqueue(this.PlayerLocation); // 新的头
-
-            if (this.IsEatingSelf()) {
+            
+            if (this.IsEatingSelf(this.headLocation)) {
                 this.dead = true;
             }
+
+            list.Add(this.headLocation);
+            this.Map.Foreground[this.headLocation] = SnakeTile.Snake;
+
+            if (!eat) {
+                this.snakeBodyLocations.Dequeue(); // 去掉尾巴
+                list.Add(previousTailLocation);
+                this.Map.Foreground[previousTailLocation] = null;
+            }
+
+            this.snakeBodyLocations.Enqueue(this.headLocation); // 新的头
 
             return list;
         }
@@ -135,31 +129,39 @@ namespace MercuryGames.Snake {
             this.lastDirection = Direction.Right;
 
             this.GenerateRandomMines();
-            this.snakeBodies.Clear();
-            this.PlayerLocation = new Point(this.Width / 2, this.Height / 2); //头生成在屏幕最中间
+            this.snakeBodyLocations.Clear();
+            this.headLocation = new Point(this.Width / 2, this.Height / 2); //头生成在屏幕最中间
 
-            this.snakeBodies.Enqueue(this.PlayerLocation.LeftPosition().LeftPosition());
-            this.snakeBodies.Enqueue(this.PlayerLocation.LeftPosition());
-            this.snakeBodies.Enqueue(this.PlayerLocation);
+            this.snakeBodyLocations.Enqueue(this.headLocation.LeftPosition().LeftPosition());
+            this.snakeBodyLocations.Enqueue(this.headLocation.LeftPosition());
+            this.snakeBodyLocations.Enqueue(this.headLocation);
+
+            foreach (Point bodyLocation in this.snakeBodyLocations) {
+                this.Map.Foreground[bodyLocation] = SnakeTile.Snake;
+            }
 
             this.Score = 0;
             this.dead = false;
 
-            this.Map.Fill(SnakeTile.Grass);
+            this.Map.Background.Fill(SnakeTile.Grass);
 
-            foreach (var food in this.Foods) {
-                this.SetTile(food, SnakeTile.Food);
+            foreach (Point foodLocation in this.FoodLocations) {
+                this.Map.Foreground[foodLocation] = SnakeTile.Food;
             }
         }
 
-        public bool IsWin() { return this.Foods.Count == 0; }
+        public bool IsWin() {
+            return this.FoodLocations.Count == 0;
+        }
 
-        public bool IsDead() { return this.dead; }
+        public bool IsDead() {
+            return this.dead;
+        }
 
         private void GenerateRandomMines(int count = 10) {
-            this.Foods.Clear();
+            this.FoodLocations.Clear();
             while (count-- > 0) {
-                this.Foods.Add(this.GetRandomPoint());
+                this.FoodLocations.Add(this.GetRandomPoint());
             }
         }
 
@@ -169,13 +171,13 @@ namespace MercuryGames.Snake {
             return new Point(x, y);
         }
 
-        private bool TestFood() => this.GetTile(this.PlayerLocation) == SnakeTile.Food;
+        private bool TestFood() => this.Map.Foreground[this.headLocation] == SnakeTile.Food;
 
         private bool ProcessFoodLogic() {
             if (this.TestFood()) {
-                this.SetTile(this.PlayerLocation, SnakeTile.Blank);
+                this.Map.Foreground[this.headLocation] = null;
                 this.AddScore();
-                this.Foods.Remove(this.PlayerLocation);
+                this.FoodLocations.Remove(this.headLocation);
 
                 return true;
             }
@@ -183,11 +185,13 @@ namespace MercuryGames.Snake {
             return false;
         }
 
-        private bool IsEatingSelf() {
+        private bool IsEatingSelf(Point newHeadLocation) {
             // 如果蛇头的位置重合了
-            return this.snakeBodies.Count(p => p == this.PlayerLocation) > 1;
+            return this.snakeBodyLocations.Contains(newHeadLocation);
         }
 
-        public void AddScore() { this.Score += 1; }
+        public void AddScore() {
+            this.Score += 1;
+        }
     }
 }
