@@ -76,7 +76,7 @@ namespace MercuryGames.Snake {
             return ProcessPlayerMove(this.lastDirection);
         }
 
-        private IEnumerable<Point> ProcessPlayerMove(Direction direction) {
+        private IEnumerable<Point> ProcessPlayerMove() {
             if (!this.frameSkipper.Tick()) {
                 return Array.Empty<Point>();
             }

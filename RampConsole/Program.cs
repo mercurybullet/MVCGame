@@ -34,8 +34,6 @@ namespace RampConsole {
             Console.Write(s);
         }
 
-
-
         static void Main() {
             IModel<SnakeTile> model = new SnakeModel(20, 15);
             SimpleConsoleView<SnakeTile> simpleConsoleView = new SimpleConsoleView<SnakeTile>();

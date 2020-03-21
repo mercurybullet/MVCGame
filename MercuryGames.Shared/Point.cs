@@ -9,6 +9,7 @@ namespace MercuryGames.Shared
         {
             return this == p;
         }
+        //重写ToString方法
         public override string ToString()
         {
             return string.Format("({0},{1})", this.X, this.Y);
@@ -25,7 +26,7 @@ namespace MercuryGames.Shared
             this.X = a;
             this.Y = b;
         }
-
+        //重写点的计算
         public static Point operator +(Point a, Point b)
         {
             int x = a.X + b.X;
@@ -50,20 +51,20 @@ namespace MercuryGames.Shared
             return a.X != b.X || a.Y != b.Y;
         }
 
-        public static Point Zero {
-            get;
-        } = new Point(0, 0);//调用了Point构造方法，传了参数0,0
+        public static Point Zero {get; } = new Point(0, 0);//调用了Point构造方法，传了参数0,0
 
+        //设计4个基本点
         public static Point PositiveX { get; } = new Point(1, 0);
         public static Point NegativeX {get;} = new Point(-1, 0);
         public static Point PositiveY {get;} = new Point(0, 1);
         public static Point NegativeY {get;} = new Point(0, -1);
 
+        //由上面的4个点可以得到一个点上下左右的点
         public Point UpPosition() => this + PositiveY;
         public Point DownPosition() => this + NegativeY;
         public Point RightPosition() => this + PositiveX;
         public Point LeftPosition() => this + NegativeX;
-
+        //将括号内的坐标转换为Point
         public static Point Parse(string s)
         {
             int a, b;
